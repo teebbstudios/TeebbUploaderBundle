@@ -1,0 +1,20 @@
+{
+    "name": "teebbstudios/uploader-bundle",
+    "description": "For symfony file upload.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Teebb\\UploaderBundle\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "伟伟权",
+            "email": "qww.zone@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/http-kernel": "^5.3"
+    }
+}
