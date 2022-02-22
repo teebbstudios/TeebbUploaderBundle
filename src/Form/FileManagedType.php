@@ -54,7 +54,8 @@ class FileManagedType extends AbstractType
         $file = $event->getData();
         $originName = $file->getClientOriginalName();
         $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
-        $uploadPath = $this->parameterBag->get('base_path');//$this->getParameter('base_path');
+//        $uploadPath = $this->parameterBag->get('base_path');//$this->getParameter('base_path');
+        $uploadPath = $this->parameterBag->get('teebb.upload.upload_dir');
         $mimeType = $file->getMimeType();
         $filesize = $file->getSize();
 
