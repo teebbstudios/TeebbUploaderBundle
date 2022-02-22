@@ -25,5 +25,9 @@ class TeebbUploaderExtension extends Extension
 
         $uploadDir = $config['upload_dir'];
         $container->setParameter('teebb.upload.upload_dir', $uploadDir);
+
+        $fileManagedTypeDefinition = $container->getDefinition('teebb.uploader.form.file_managed_type');
+//        $fileManagedTypeDefinition->setArgument(0, $uploadDir);
+        $fileManagedTypeDefinition->addMethodCall('setUploadDir', [$uploadDir]);
     }
 }

@@ -14,15 +14,30 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileManagedType extends AbstractType
 {
-    /**
-     * @var ParameterBagInterface
-     */
-    private ParameterBagInterface $parameterBag;
+//    /**
+//     * @var ParameterBagInterface
+//     */
+//    private ParameterBagInterface $parameterBag;
+//
+//    public function __construct(ParameterBagInterface $parameterBag)
+//    {
+//        $this->parameterBag = $parameterBag;
+//    }
 
-    public function __construct(ParameterBagInterface $parameterBag)
+    private $uploadDir;
+
+    /**
+     * @param mixed $uploadDir
+     */
+    public function setUploadDir($uploadDir): void
     {
-        $this->parameterBag = $parameterBag;
+        $this->uploadDir = $uploadDir;
     }
+
+//    public function __construct(string $uploadDir)
+//    {
+//        $this->uploadDir = $uploadDir;
+//    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -55,11 +70,11 @@ class FileManagedType extends AbstractType
         $originName = $file->getClientOriginalName();
         $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
 //        $uploadPath = $this->parameterBag->get('base_path');//$this->getParameter('base_path');
-        $uploadPath = $this->parameterBag->get('teebb.upload.upload_dir');
+//        $uploadPath = $this->parameterBag->get('teebb.upload.upload_dir');
         $mimeType = $file->getMimeType();
         $filesize = $file->getSize();
 
-        $file->move($uploadPath, $fileName);
+        $file->move($this->uploadDir, $fileName);
 
 //        $fileManaged = new FileManaged();
 //        $fileManaged->setOriginName($originName);
