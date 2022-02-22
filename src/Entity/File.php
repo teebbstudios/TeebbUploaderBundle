@@ -6,10 +6,10 @@ namespace Teebb\UploaderBundle\Entity;
 
 class File
 {
-    /**
-     * @var int
-     */
-    private $id;
+//    /**
+//     * @var int
+//     */
+//    private $id;
 
     /**
      * @var string
@@ -31,13 +31,13 @@ class File
      */
     private $fileSize;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+//    /**
+//     * @return int
+//     */
+//    public function getId(): int
+//    {
+//        return $this->id;
+//    }
 
     /**
      * @return string

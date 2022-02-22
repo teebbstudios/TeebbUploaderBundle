@@ -12,16 +12,16 @@ class TeebbUploaderBundle extends Bundle
     {
         parent::build($container);
 
-//        $mapping = [
-//            realpath(__DIR__ .'/Resources/config/doctrine-mapping') => 'Teebb\UploaderBundle\Entity'
-//        ];
+        $mapping = [
+            realpath(__DIR__ . '/Resources/config/doctrine-mapping') => 'Teebb\UploaderBundle\Entity'
+        ];
 
         $namespaces = ['Teebb\UploaderBundle\Entity'];
         $dirs = [realpath(__DIR__ . '/Entity')];
-        if (class_exists(DoctrineOrmMappingsPass::class)){
-            //        $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping));
+        if (class_exists(DoctrineOrmMappingsPass::class)) {
+            $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping));
 
-            $container->addCompilerPass(DoctrineOrmMappingsPass::createAnnotationMappingDriver($namespaces, $dirs));
+//            $container->addCompilerPass(DoctrineOrmMappingsPass::createAnnotationMappingDriver($namespaces, $dirs));
         }
     }
 }

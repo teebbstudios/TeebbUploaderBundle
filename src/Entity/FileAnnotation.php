@@ -6,17 +6,16 @@ namespace Teebb\UploaderBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="teebb_file_annotation")
+ * @ORM\MappedSuperclass
  */
 class FileAnnotation
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+//    /**
+//     * @ORM\Id
+//     * @ORM\GeneratedValue
+//     * @ORM\Column(type="integer")
+//     */
+//    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -39,10 +38,10 @@ class FileAnnotation
     private $mimeType;
 
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getOriginName(): ?string
     {
