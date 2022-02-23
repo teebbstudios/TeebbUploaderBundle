@@ -3,6 +3,7 @@
 namespace Teebb\UploaderBundle\Form;
 
 use App\Entity\FileManaged;
+use App\Entity\SimpleFile;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -76,6 +77,11 @@ class FileManagedType extends AbstractType
 
         $file->move($this->uploadDir, $fileName);
 
+        $simpleFile = new SimpleFile();
+        $simpleFile->setOriginName($originName);
+        $simpleFile->setFileName($fileName);
+        $simpleFile->setMimeType($mimeType);
+        $simpleFile->setFileSize($filesize);
 //        $fileManaged = new FileManaged();
 //        $fileManaged->setOriginName($originName);
 //        $fileManaged->setFileName($fileName);
@@ -83,7 +89,7 @@ class FileManagedType extends AbstractType
 //        $fileManaged->setPath($uploadPath . '/' . $fileName);
 //        $fileManaged->setFileSize($filesize);
 //
-//        $event->setData($fileManaged);
+        $event->setData($simpleFile);
     }
 
 //    public function configureOptions(OptionsResolver $resolver)
