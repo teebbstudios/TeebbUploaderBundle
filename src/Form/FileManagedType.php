@@ -42,27 +42,35 @@ class FileManagedType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::SUBMIT,[$this, 'onFormSubmit']);
-//        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event){
-//            /**@var UploadedFile $data**/
-//            $file = $event->getData();
-//            $originName = $file->getClientOriginalName();
-//            $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
-//            $uploadPath = $this->parameterBag->get('base_path');//$this->getParameter('base_path');
-//            $mimeType = $file->getMimeType();
-//            $filesize = $file->getSize();
+//        dd($options);
+//        $builder->addEventListener(FormEvents::SUBMIT,[$this, 'onFormSubmit']);
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($options){
+            /**@var UploadedFile $data**/
+            $file = $event->getData();
+            $originName = $file->getClientOriginalName();
+            $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
+//        $uploadPath = $this->parameterBag->get('base_path');//$this->getParameter('base_path');
+//        $uploadPath = $this->parameterBag->get('teebb.upload.upload_dir');
+            $mimeType = $file->getMimeType();
+            $filesize = $file->getSize();
+
+            $file->move($this->uploadDir, $fileName);
+
+            $fileClass = $options['file_class'];
+            $simpleFile = new $fileClass();
+            $simpleFile->setOriginName($originName);
+            $simpleFile->setFileName($fileName);
+            $simpleFile->setMimeType($mimeType);
+            $simpleFile->setFileSize($filesize);
+//        $fileManaged = new FileManaged();
+//        $fileManaged->setOriginName($originName);
+//        $fileManaged->setFileName($fileName);
+//        $fileManaged->setMimeType($mimeType);
+//        $fileManaged->setPath($uploadPath . '/' . $fileName);
+//        $fileManaged->setFileSize($filesize);
 //
-//            $file->move($uploadPath, $fileName);
-//
-//            $fileManaged = new FileManaged();
-//            $fileManaged->setOriginName($originName);
-//            $fileManaged->setFileName($fileName);
-//            $fileManaged->setMimeType($mimeType);
-//            $fileManaged->setPath($uploadPath . '/' . $fileName);
-//            $fileManaged->setFileSize($filesize);
-//
-//            $event->setData($fileManaged);
-//        });
+            $event->setData($simpleFile);
+        });
     }
 
     public function onFormSubmit(FormEvent $event){
@@ -92,12 +100,16 @@ class FileManagedType extends AbstractType
         $event->setData($simpleFile);
     }
 
-//    public function configureOptions(OptionsResolver $resolver)
-//    {
+    public function configureOptions(OptionsResolver $resolver)
+    {
 //        $resolver->setDefaults([
 //            // Configure your form options here
+//            'file_className' => 'abc'
 //        ]);
-//    }
+
+        $resolver->setDefined('file_class');
+        $resolver->setRequired('file_class');
+    }
 
     public function getParent()
     {
