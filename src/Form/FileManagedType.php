@@ -2,8 +2,8 @@
 
 namespace Teebb\UploaderBundle\Form;
 
-use App\Entity\FileManaged;
-use App\Entity\SimpleFile;
+
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Teebb\UploaderBundle\Event\AfterFileObjectSetPropertyEvent;
 
 class FileManagedType extends AbstractType
 {
@@ -26,6 +27,16 @@ class FileManagedType extends AbstractType
 //    }
 
     private $uploadDir;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * @param mixed $uploadDir
@@ -62,6 +73,10 @@ class FileManagedType extends AbstractType
             $simpleFile->setFileName($fileName);
             $simpleFile->setMimeType($mimeType);
             $simpleFile->setFileSize($filesize);
+
+            $afterEvent = new AfterFileObjectSetPropertyEvent($file, $simpleFile);
+            $this->eventDispatcher->dispatch($afterEvent);
+
 //        $fileManaged = new FileManaged();
 //        $fileManaged->setOriginName($originName);
 //        $fileManaged->setFileName($fileName);
@@ -69,7 +84,7 @@ class FileManagedType extends AbstractType
 //        $fileManaged->setPath($uploadPath . '/' . $fileName);
 //        $fileManaged->setFileSize($filesize);
 //
-            $event->setData($simpleFile);
+            $event->setData($afterEvent->getFileObject());
         });
     }
 
