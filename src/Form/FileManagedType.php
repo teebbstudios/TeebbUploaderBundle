@@ -145,4 +145,9 @@ class FileManagedType extends AbstractType
     {
         return FileType::class;
     }
+
+    public function getBlockPrefix()
+    {
+        return 'teebb_file';
+    }
 }
