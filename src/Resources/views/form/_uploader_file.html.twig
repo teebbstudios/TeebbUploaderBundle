@@ -1,5 +1,4 @@
 {% block teebb_file_widget -%}
-    {{ dump() }}
     <{{ element|default('div') }} class="custom-file">
     {%- set type = type|default('file') -%}
     {%- set input_lang = 'en' -%}
@@ -13,5 +12,26 @@
         {%- endif -%}
     </label>
     </{{ element|default('div') }}>
-    <div >123</div>
+    {% if data %}
+        <div>
+            {% if show_image %}
+                <img src="{{ base_path ~ data.fileName }}" {{- block('image_attr') -}} />
+            {% else %}
+                <a href="{{ base_path ~ data.fileName }}" download>{{ data.originName }}</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block image_attr %}
+    {%- for attrname, attrvalue in image_attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ translation_domain is same as(false) or attrvalue is null ? attrvalue : attrvalue|trans(attr_translation_parameters, translation_domain) }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
 {% endblock %}

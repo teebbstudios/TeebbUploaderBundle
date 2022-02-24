@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Teebb\UploaderBundle\Entity\File;
@@ -84,6 +86,13 @@ class FileManagedType extends AbstractType
         });
     }
 
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['base_path'] = $options['base_path'];
+        $view->vars['show_image'] = $options['show_image'];
+        $view->vars['image_attr'] = $options['image_attr'];
+    }
+
     private function fillFileObject(UploadedFile $file, File $fileObject)
     {
         $originName = $file->getClientOriginalName();
@@ -135,8 +144,12 @@ class FileManagedType extends AbstractType
             // Configure your form options here
             'data_class' => null,
             'required' => false,
+            'show_image' => false,
+            'image_attr' => [ 'width' => '100px', 'class' => 'my-3']
         ]);
 
+        $resolver->setDefined('base_path');
+        $resolver->setRequired('base_path');
         $resolver->setDefined('file_class');
         $resolver->setRequired('file_class');
     }
