@@ -10,24 +10,24 @@ use Teebb\UploaderBundle\Entity\File;
 class AfterFileObjectSetPropertyEvent
 {
     /**
-     * @var UploadedFile
+     * @var UploadedFile|null
      */
-    private UploadedFile $uploadedFile;
+    private $uploadedFile;
     /**
      * @var File
      */
-    private File $fileObject;
+    private $fileObject;
 
-    public function __construct(UploadedFile $uploadedFile, File $fileObject)
+    public function __construct(?UploadedFile $uploadedFile, File $fileObject)
     {
         $this->uploadedFile = $uploadedFile;
         $this->fileObject = $fileObject;
     }
 
     /**
-     * @return UploadedFile
+     * @return UploadedFile|null
      */
-    public function getUploadedFile(): UploadedFile
+    public function getUploadedFile(): ?UploadedFile
     {
         return $this->uploadedFile;
     }

@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Teebb\UploaderBundle\Entity\File;
 use Teebb\UploaderBundle\Event\AfterFileObjectSetPropertyEvent;
 
 class FileManagedType extends AbstractType
@@ -55,41 +56,54 @@ class FileManagedType extends AbstractType
     {
 //        dd($options);
 //        $builder->addEventListener(FormEvents::SUBMIT,[$this, 'onFormSubmit']);
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($options){
-            /**@var UploadedFile $data**/
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($options) {
+            /**@var UploadedFile|null $data * */
             $file = $event->getData();
-            $originName = $file->getClientOriginalName();
-            $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
-//        $uploadPath = $this->parameterBag->get('base_path');//$this->getParameter('base_path');
-//        $uploadPath = $this->parameterBag->get('teebb.upload.upload_dir');
-            $mimeType = $file->getMimeType();
-            $filesize = $file->getSize();
 
-            $file->move($this->uploadDir, $fileName);
+            $fileObject = $event->getForm()->getData();
 
-            $fileClass = $options['file_class'];
-            $simpleFile = new $fileClass();
-            $simpleFile->setOriginName($originName);
-            $simpleFile->setFileName($fileName);
-            $simpleFile->setMimeType($mimeType);
-            $simpleFile->setFileSize($filesize);
+//            dd($file, $fileObject);
+            if ($file && !$fileObject) {
 
-            $afterEvent = new AfterFileObjectSetPropertyEvent($file, $simpleFile);
+                $fileClass = $options['file_class'];
+                $fileObject = new $fileClass();
+
+                $this->fillFileObject($file, $fileObject);
+
+            } elseif ($file && $fileObject) {
+
+                $this->fillFileObject($file, $fileObject);
+
+            }
+
+            $afterEvent = new AfterFileObjectSetPropertyEvent($file, $fileObject);
             $this->eventDispatcher->dispatch($afterEvent);
 
-//        $fileManaged = new FileManaged();
-//        $fileManaged->setOriginName($originName);
-//        $fileManaged->setFileName($fileName);
-//        $fileManaged->setMimeType($mimeType);
-//        $fileManaged->setPath($uploadPath . '/' . $fileName);
-//        $fileManaged->setFileSize($filesize);
-//
             $event->setData($afterEvent->getFileObject());
+
         });
     }
 
-    public function onFormSubmit(FormEvent $event){
-        /**@var UploadedFile $data**/
+    private function fillFileObject(UploadedFile $file, File $fileObject)
+    {
+        $originName = $file->getClientOriginalName();
+        $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
+
+        $mimeType = $file->getMimeType();
+        $filesize = $file->getSize();
+
+        $file->move($this->uploadDir, $fileName);
+
+        $fileObject->setOriginName($originName);
+        $fileObject->setFileName($fileName);
+        $fileObject->setMimeType($mimeType);
+        $fileObject->setFileSize($filesize);
+
+    }
+
+    public function onFormSubmit(FormEvent $event)
+    {
+        /**@var UploadedFile $data * */
         $file = $event->getData();
         $originName = $file->getClientOriginalName();
         $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
@@ -117,10 +131,11 @@ class FileManagedType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-//        $resolver->setDefaults([
-//            // Configure your form options here
-//            'file_className' => 'abc'
-//        ]);
+        $resolver->setDefaults([
+            // Configure your form options here
+            'data_class' => null,
+            'required' => false,
+        ]);
 
         $resolver->setDefined('file_class');
         $resolver->setRequired('file_class');
