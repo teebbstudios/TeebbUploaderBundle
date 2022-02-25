@@ -47,7 +47,7 @@ class TeebbUploaderExtension extends Extension
         $handlerDefinition = new Definition(UploadHandler::class);
 
         $handlerDefinition->setArgument(0, $uploadDir);
-        $handlerDefinition->setArgument(1, new Reference('teebb.uploader.namer.php_namer'));
+        $handlerDefinition->setArgument(1, new Reference('teebb.uploader.namer.hash_namer'));
         $handlerDefinition->setArgument(2, new Reference('teebb.uploader.storage.file_system_storage'));
 
         $container->setDefinition(UploadHandler::class, $handlerDefinition);

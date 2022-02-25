@@ -5,5 +5,11 @@
     <services>
         <service id="teebb.uploader.namer.php_namer" class="Teebb\UploaderBundle\Namer\PhpNamer" public="true">
         </service>
+        <service id="Teebb\UploaderBundle\Namer\PhpNamer" alias="teebb.uploader.namer.php_namer" public="true"/>
+
+        <service id="teebb.uploader.namer.hash_namer" class="Teebb\UploaderBundle\Namer\HashNamer" public="true">
+        </service>
+        <service id="Teebb\UploaderBundle\Namer\HashNamer" alias="teebb.uploader.namer.hash_namer" public="true"/>
+
     </services>
 </container>
