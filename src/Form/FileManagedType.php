@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Teebb\UploaderBundle\Entity\File;
 use Teebb\UploaderBundle\Event\AfterFileObjectSetPropertyEvent;
+use Teebb\UploaderBundle\Handler\UploadHandler;
 
 class FileManagedType extends AbstractType
 {
@@ -35,10 +36,15 @@ class FileManagedType extends AbstractType
      * @var EventDispatcherInterface
      */
     private EventDispatcherInterface $eventDispatcher;
+    /**
+     * @var UploadHandler
+     */
+    private UploadHandler $uploadHandler;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher, UploadHandler $uploadHandler)
     {
         $this->eventDispatcher = $eventDispatcher;
+        $this->uploadHandler = $uploadHandler;
     }
 
     /**
@@ -96,12 +102,14 @@ class FileManagedType extends AbstractType
     private function fillFileObject(UploadedFile $file, File $fileObject)
     {
         $originName = $file->getClientOriginalName();
-        $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
+//        $fileName = pathinfo(htmlspecialchars($originName), PATHINFO_FILENAME) . '-' . $file->getFilename() . '.' . $file->getClientOriginalExtension();
 
         $mimeType = $file->getMimeType();
         $filesize = $file->getSize();
 
-        $file->move($this->uploadDir, $fileName);
+//        $file->move($this->uploadDir, $fileName);
+
+        $fileName = $this->uploadHandler->upload($file);
 
         $fileObject->setOriginName($originName);
         $fileObject->setFileName($fileName);
