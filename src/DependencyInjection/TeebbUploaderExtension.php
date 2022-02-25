@@ -44,10 +44,18 @@ class TeebbUploaderExtension extends Extension
         $fileManagedTypeDefinition->addMethodCall('setUploadDir', [$uploadDir]);
 
 //        $this->registerNamers($container);
+        $namerServiceId = $config['namer']['service'];
+        $options = $config['namer']['options'];
+        if (!empty($options))
+        {
+            $namerDefinition = $container->getDefinition($namerServiceId);
+            $namerDefinition->addMethodCall('configure', [$options]);
+        }
+
         $handlerDefinition = new Definition(UploadHandler::class);
 
         $handlerDefinition->setArgument(0, $uploadDir);
-        $handlerDefinition->setArgument(1, new Reference('teebb.uploader.namer.hash_namer'));
+        $handlerDefinition->setArgument(1, new Reference($namerServiceId));
         $handlerDefinition->setArgument(2, new Reference('teebb.uploader.storage.file_system_storage'));
 
         $container->setDefinition(UploadHandler::class, $handlerDefinition);

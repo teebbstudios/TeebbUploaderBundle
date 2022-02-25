@@ -23,6 +23,20 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('upload_dir')->isRequired()->end()
+                ->arrayNode('namer')
+                    ->addDefaultsIfNotSet()
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function($value){
+                            return ['service'=>$value, 'options'=>[]];
+                        })
+                    ->end()
+                    ->children()
+                        ->scalarNode('service')->defaultValue('teebb.uploader.namer.php_namer')->end()
+                        ->variableNode('options')->defaultValue([])->end()
+                    ->end()
+                ->end()
+                ->scalarNode('storage')->defaultValue('teebb.uploader.storage.file_system_storage')->end()
             ->end();
 
         return $builder;
