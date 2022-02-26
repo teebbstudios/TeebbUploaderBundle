@@ -84,10 +84,7 @@ class FileManagedType extends AbstractType
 
             }
 
-            $afterEvent = new AfterFileObjectSetPropertyEvent($file, $fileObject);
-            $this->eventDispatcher->dispatch($afterEvent);
-
-            $event->setData($afterEvent->getFileObject());
+            $event->setData($fileObject);
 
         });
     }

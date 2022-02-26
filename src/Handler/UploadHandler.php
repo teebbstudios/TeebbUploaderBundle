@@ -23,13 +23,16 @@ class UploadHandler
         $this->storage = $storage;
     }
 
-    public function upload(UploadedFile $file)
+    public function upload(UploadedFile $file, string $fileName)
     {
-        // todo: 1. 重命名文件 2.move
-        $fileName = $this->namer->rename($file);
 
         $this->storage->upload($file, $this->distDir, $fileName);
 
         return $fileName;
+    }
+
+    public function getFileName(UploadedFile $file)
+    {
+        return $this->namer->rename($file);
     }
 }

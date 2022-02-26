@@ -30,7 +30,8 @@ class TeebbUploaderExtension extends Extension
         $fileNames = [
             'form',
             'namer',
-            'storage'
+            'storage',
+            'doctrine'
         ];
         foreach ($fileNames as $configName)
         {
