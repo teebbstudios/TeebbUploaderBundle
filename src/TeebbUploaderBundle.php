@@ -6,6 +6,7 @@ use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use Teebb\UploaderBundle\DependencyInjection\Compiler\NamerCompilerPass;
 use Teebb\UploaderBundle\DependencyInjection\Compiler\TwigFormThemesCompilerPass;
 
 class TeebbUploaderBundle extends Bundle
@@ -30,5 +31,7 @@ class TeebbUploaderBundle extends Bundle
         {
             $container->addCompilerPass(new TwigFormThemesCompilerPass());
         }
+
+        $container->addCompilerPass(new NamerCompilerPass());
     }
 }

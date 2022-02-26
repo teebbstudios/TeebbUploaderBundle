@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Teebb\UploaderBundle\Handler\UploadHandler;
+use Teebb\UploaderBundle\Namer\NamerInterface;
 use Teebb\UploaderBundle\Namer\PhpNamer;
 
 class TeebbUploaderExtension extends Extension
@@ -59,6 +60,8 @@ class TeebbUploaderExtension extends Extension
         $handlerDefinition->setArgument(2, new Reference('teebb.uploader.storage.file_system_storage'));
 
         $container->setDefinition(UploadHandler::class, $handlerDefinition);
+
+        $container->registerForAutoconfiguration(NamerInterface::class)->addTag('teebb.namer');
     }
 
 //    private function registerNamers(ContainerBuilder $containerBuilder)
