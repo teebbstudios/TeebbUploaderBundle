@@ -38,26 +38,26 @@ class TeebbUploaderExtension extends Extension
             $loader->load($configName.'.xml');
         }
 
-        $uploadDir = $config['upload_dir'];
-        $container->setParameter('teebb.upload.upload_dir', $uploadDir);
+//        $uploadDir = $config['upload_dir'];
+//        $container->setParameter('teebb.upload.upload_dir', $uploadDir);
 
-        $fileManagedTypeDefinition = $container->getDefinition('teebb.uploader.form.file_managed_type');
+//        $fileManagedTypeDefinition = $container->getDefinition('teebb.uploader.form.file_managed_type');
 //        $fileManagedTypeDefinition->setArgument(0, $uploadDir);
-        $fileManagedTypeDefinition->addMethodCall('setUploadDir', [$uploadDir]);
+//        $fileManagedTypeDefinition->addMethodCall('setUploadDir', [$uploadDir]);
 
 //        $this->registerNamers($container);
-        $namerServiceId = $config['namer']['service'];
-        $options = $config['namer']['options'];
-        if (!empty($options))
-        {
-            $namerDefinition = $container->getDefinition($namerServiceId);
-            $namerDefinition->addMethodCall('configure', [$options]);
-        }
+//        $namerServiceId = $config['namer']['service'];
+//        $options = $config['namer']['options'];
+//        if (!empty($options))
+//        {
+//            $namerDefinition = $container->getDefinition($namerServiceId);
+//            $namerDefinition->addMethodCall('configure', [$options]);
+//        }
 
         $handlerDefinition = new Definition(UploadHandler::class);
 
-        $handlerDefinition->setArgument(0, $uploadDir);
-        $handlerDefinition->setArgument(1, new Reference($namerServiceId));
+        $handlerDefinition->setArgument(0, '');
+        $handlerDefinition->setArgument(1, new Reference('teebb.uploader.namer.php_namer'));
         $handlerDefinition->setArgument(2, new Reference('teebb.uploader.storage.file_system_storage'));
 
         $container->setDefinition(UploadHandler::class, $handlerDefinition);

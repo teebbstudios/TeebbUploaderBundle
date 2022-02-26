@@ -4,6 +4,7 @@
 namespace Teebb\UploaderBundle\DependencyInjection;
 
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -20,25 +21,64 @@ class Configuration implements ConfigurationInterface
             $rootNode = $builder->root('teebb_uploader');
         }
 
-        $rootNode
-            ->children()
-                ->scalarNode('upload_dir')->isRequired()->end()
-                ->arrayNode('namer')
-                    ->addDefaultsIfNotSet()
-                    ->beforeNormalization()
-                        ->ifString()
-                        ->then(function($value){
-                            return ['service'=>$value, 'options'=>[]];
-                        })
-                    ->end()
-                    ->children()
-                        ->scalarNode('service')->defaultValue('teebb.uploader.namer.php_namer')->end()
-                        ->variableNode('options')->defaultValue([])->end()
-                    ->end()
-                ->end()
-                ->scalarNode('storage')->defaultValue('teebb.uploader.storage.file_system_storage')->end()
-            ->end();
+//        $rootNode
+//            ->children()
+//                ->scalarNode('upload_dir')->isRequired()->end()
+//                ->arrayNode('namer')
+//                    ->addDefaultsIfNotSet()
+//                    ->beforeNormalization()
+//                        ->ifString()
+//                        ->then(function($value){
+//                            return ['service'=>$value, 'options'=>[]];
+//                        })
+//                    ->end()
+//                    ->children()
+//                        ->scalarNode('service')->defaultValue('teebb.uploader.namer.php_namer')->end()
+//                        ->variableNode('options')->defaultValue([])->end()
+//                    ->end()
+//                ->end()
+//                ->scalarNode('storage')->defaultValue('teebb.uploader.storage.file_system_storage')->end()
+//            ->end();
+
+        $this->addHandlersSection($rootNode);
 
         return $builder;
+    }
+
+    private function addHandlersSection(ArrayNodeDefinition $definition)
+    {
+        $definition
+            ->children()
+                ->arrayNode('handlers')
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('entity')->isRequired()->end()
+                            ->scalarNode('upload_dir')->isRequired()->end()
+                            ->scalarNode('uri_prefix')->isRequired()->end()
+                            ->arrayNode('namer')
+                                ->addDefaultsIfNotSet()
+                                ->beforeNormalization()
+                                    ->ifString()
+                                    ->then(function($value){
+                                        return ['service'=>$value, 'options'=>[]];
+                                    })
+                                ->end()
+                                ->children()
+                                    ->scalarNode('service')->defaultValue('teebb.uploader.namer.php_namer')->end()
+                                    ->variableNode('options')->defaultValue([])->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('storage')
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->enumNode('type')->values(['file_system', 'fly_system'])->defaultValue('file_system')->end()
+                                    ->scalarNode('service')->defaultValue('teebb.uploader.storage.file_system_storage')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 }
