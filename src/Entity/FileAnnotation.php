@@ -4,6 +4,7 @@ namespace Teebb\UploaderBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\MappedSuperclass
@@ -37,6 +38,10 @@ class FileAnnotation
      */
     private $mimeType;
 
+    /**
+     * @var UploadedFile|null
+     */
+    private $uploadedFile;
 
 //    public function getId(): ?int
 //    {
@@ -91,4 +96,19 @@ class FileAnnotation
         return $this;
     }
 
+    /**
+     * @return UploadedFile|null
+     */
+    public function getUploadedFile(): ?UploadedFile
+    {
+        return $this->uploadedFile;
+    }
+
+    /**
+     * @param UploadedFile|null $uploadedFile
+     */
+    public function setUploadedFile(?UploadedFile $uploadedFile): void
+    {
+        $this->uploadedFile = $uploadedFile;
+    }
 }

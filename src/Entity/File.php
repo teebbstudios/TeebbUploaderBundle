@@ -4,6 +4,8 @@
 namespace Teebb\UploaderBundle\Entity;
 
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 class File
 {
 //    /**
@@ -38,6 +40,11 @@ class File
 //    {
 //        return $this->id;
 //    }
+
+    /**
+     * @var UploadedFile|null
+     */
+    private $uploadedFile;
 
     /**
      * @return string
@@ -101,6 +108,22 @@ class File
     public function setFileSize(int $fileSize): void
     {
         $this->fileSize = $fileSize;
+    }
+
+    /**
+     * @return UploadedFile|null
+     */
+    public function getUploadedFile(): ?UploadedFile
+    {
+        return $this->uploadedFile;
+    }
+
+    /**
+     * @param UploadedFile|null $uploadedFile
+     */
+    public function setUploadedFile(?UploadedFile $uploadedFile): void
+    {
+        $this->uploadedFile = $uploadedFile;
     }
 
 }

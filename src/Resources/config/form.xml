@@ -6,7 +6,7 @@
         <service id="teebb.uploader.form.file_managed_type" class="Teebb\UploaderBundle\Form\FileManagedType" public="true">
 <!--            <argument type="service" id="parameter_bag" />-->
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="Teebb\UploaderBundle\Handler\UploadHandler"/>
+<!--            <argument type="service" id="Teebb\UploaderBundle\Handler\UploadHandler"/>-->
             <tag name="form.type"/>
         </service>
     </services>

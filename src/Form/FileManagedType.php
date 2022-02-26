@@ -36,15 +36,15 @@ class FileManagedType extends AbstractType
      * @var EventDispatcherInterface
      */
     private EventDispatcherInterface $eventDispatcher;
-    /**
-     * @var UploadHandler
-     */
-    private UploadHandler $uploadHandler;
+//    /**
+//     * @var UploadHandler
+//     */
+//    private UploadHandler $uploadHandler;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, UploadHandler $uploadHandler)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->uploadHandler = $uploadHandler;
+//        $this->uploadHandler = $uploadHandler;
     }
 
     /**
@@ -109,10 +109,10 @@ class FileManagedType extends AbstractType
 
 //        $file->move($this->uploadDir, $fileName);
 
-        $fileName = $this->uploadHandler->upload($file);
-
+//        $fileName = $this->uploadHandler->upload($file);
+        $fileObject->setUploadedFile($file);
         $fileObject->setOriginName($originName);
-        $fileObject->setFileName($fileName);
+//        $fileObject->setFileName($fileName);
         $fileObject->setMimeType($mimeType);
         $fileObject->setFileSize($filesize);
 
