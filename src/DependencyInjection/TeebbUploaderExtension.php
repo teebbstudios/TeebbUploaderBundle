@@ -28,10 +28,11 @@ class TeebbUploaderExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $fileNames = [
+            'controller',
+            'doctrine',
             'form',
             'namer',
             'storage',
-            'doctrine'
         ];
         foreach ($fileNames as $configName) {
             $loader->load($configName . '.xml');

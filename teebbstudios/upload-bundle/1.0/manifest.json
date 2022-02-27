@@ -1,6 +1,6 @@
 {
   "bundles": {
-    "Teebb\\UploadBundle\\TeebbUploadBundle": ["all"]
+    "Teebb\\UploadBundle\\TeebbUploaderBundle": ["all"]
   },
   "copy-from-recipe": {
     "config/": "%CONFIG_DIR%/"
