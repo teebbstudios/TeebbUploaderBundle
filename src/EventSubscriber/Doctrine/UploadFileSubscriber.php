@@ -8,23 +8,35 @@ use App\Entity\SimpleFile;
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Teebb\UploaderBundle\Event\AfterFileObjectSetPropertyEvent;
 use Teebb\UploaderBundle\Handler\UploadHandler;
 
 class UploadFileSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var UploadHandler
-     */
-    private $uploadHandler;
+//    /**
+//     * @var UploadHandler
+//     */
+//    private $uploadHandler;
 
     private $eventDispatcher;
 
-    public function __construct(UploadHandler $uploadHandler, EventDispatcherInterface $eventDispatcher)
+    /**
+     * @var array
+     */
+    private $handlers;
+
+    private $container;
+
+    public function __construct(ParameterBagInterface $parameterBag, ContainerInterface $container, EventDispatcherInterface $eventDispatcher)
     {
-        $this->uploadHandler = $uploadHandler;
+//        $this->uploadHandler = $uploadHandler;
+        $this->handlers = $parameterBag->get('teebb.uploader.handlers');
+
         $this->eventDispatcher = $eventDispatcher;
+        $this->container = $container;
     }
 
     public function getSubscribedEvents()
@@ -63,11 +75,13 @@ class UploadFileSubscriber implements EventSubscriberInterface
 
     private function setFileOjbectName(object $object)
     {
-        if ($object instanceof SimpleFile)
+        $className = get_class($object);
+        if (key_exists($className, $this->handlers))
         {
             $file = $object->getUploadedFile();
             if ($file){
-                $fileName = $this->uploadHandler->getFileName($file);
+                $handler = $this->container->get($this->handlers[$className]);
+                $fileName = $handler->getFileName($file);
 
                 $object->setFileName($fileName);
 
@@ -79,12 +93,15 @@ class UploadFileSubscriber implements EventSubscriberInterface
 
     private function uploadFile(object $object)
     {
-        if ($object instanceof SimpleFile)
+        $className = get_class($object);
+        if (key_exists($className, $this->handlers))
         {
             $uploadedFile = $object->getUploadedFile();
             if ($uploadedFile){
                 $fileName = $object->getFileName();
-                $this->uploadHandler->upload($uploadedFile, $fileName);
+                $handler = $this->container->get($this->handlers[$className]);
+
+                $handler->upload($uploadedFile, $fileName);
             }
         }
     }

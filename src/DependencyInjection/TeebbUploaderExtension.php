@@ -99,6 +99,7 @@ class TeebbUploaderExtension extends Extension
             $handlerDefinition->setArgument(0, $values['upload_dir']);
             $handlerDefinition->setArgument(1, new Reference($namerServiceId));
             $handlerDefinition->setArgument(2, new Reference($storageServiceId));
+            $handlerDefinition->setPublic(true);
 
             $containerBuilder->setDefinition($id, $handlerDefinition);
 
