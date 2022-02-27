@@ -1,0 +1,20 @@
+teebb_upload:
+    handlers:
+        # 为不同的类定义不同的Handler， 键值用于handler服务类的id，可以任意定义
+        handler_name1:
+            entity: App\Entity\SimpleFile # 文件数据的Entity全类名
+            upload_dir: '%kernel.project_dir%/public/teebb_upload'  # 上传的目标目录
+            uri_prefix: 'teebb_upload' # 用于文件显示时添加前缀
+
+        handler_name2:
+            entity: App\Entity\SimpleFile # 文件数据的Entity全类名
+            upload_dir: 'string'  # 上传的目标目录
+            uri_prefix: 'string' # 用于文件显示时添加前缀
+            storage:  # file_system 这里暂时这么写，这个名称对应`FileSystemStorage`服务类
+                type: 'fly_system'
+                service: 'oneup_flysystem.default_filesystem_filesystem'
+            namer:
+                service: Teebb\UploadBundle\Namer\HashNamer
+                options:
+                    algorithm: sha1
+                    length: 10
