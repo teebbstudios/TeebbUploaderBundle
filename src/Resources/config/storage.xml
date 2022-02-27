@@ -5,5 +5,9 @@
     <services>
         <service id="teebb.uploader.storage.file_system_storage" class="Teebb\UploaderBundle\Storage\FileSystemStorage" public="true">
         </service>
+
+        <service id="teebb.uploader.storage.fly_system_storage" class="Teebb\UploaderBundle\Storage\FlySystemStorage" public="true">
+            <argument />
+        </service>
     </services>
 </container>
