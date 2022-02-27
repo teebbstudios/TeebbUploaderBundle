@@ -25,7 +25,7 @@ class TeebbUploaderExtension extends Extension
         $config = $processor->processConfiguration($configuration, $configs);
 
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $fileNames = [
             'form',
@@ -33,9 +33,8 @@ class TeebbUploaderExtension extends Extension
             'storage',
             'doctrine'
         ];
-        foreach ($fileNames as $configName)
-        {
-            $loader->load($configName.'.xml');
+        foreach ($fileNames as $configName) {
+            $loader->load($configName . '.xml');
         }
 
 //        $uploadDir = $config['upload_dir'];
@@ -54,15 +53,17 @@ class TeebbUploaderExtension extends Extension
 //            $namerDefinition->addMethodCall('configure', [$options]);
 //        }
 
-        $handlerDefinition = new Definition(UploadHandler::class);
+//        $handlerDefinition = new Definition(UploadHandler::class);
+//
+//        $handlerDefinition->setArgument(0, '');
+//        $handlerDefinition->setArgument(1, new Reference('teebb.uploader.namer.php_namer'));
+//        $handlerDefinition->setArgument(2, new Reference('teebb.uploader.storage.file_system_storage'));
+//
+//        $container->setDefinition(UploadHandler::class, $handlerDefinition);
+//
+//        $container->registerForAutoconfiguration(NamerInterface::class)->addTag('teebb.namer');
 
-        $handlerDefinition->setArgument(0, '');
-        $handlerDefinition->setArgument(1, new Reference('teebb.uploader.namer.php_namer'));
-        $handlerDefinition->setArgument(2, new Reference('teebb.uploader.storage.file_system_storage'));
-
-        $container->setDefinition(UploadHandler::class, $handlerDefinition);
-
-        $container->registerForAutoconfiguration(NamerInterface::class)->addTag('teebb.namer');
+        $this->registerHandlers($container, $config['handlers']);
     }
 
 //    private function registerNamers(ContainerBuilder $containerBuilder)
@@ -71,4 +72,40 @@ class TeebbUploaderExtension extends Extension
 ////        $containerBuilder->setDefinition(PhpNamer::class, $namerDefinition);
 //        $containerBuilder->register(PhpNamer::class, PhpNamer::class);
 //    }
+
+    private function registerHandlers(ContainerBuilder $containerBuilder, array $handlers)
+    {
+        $entityHandlers = [];
+        foreach ($handlers as $handlerName => $values) {
+            $id = sprintf('%s.%s', 'teebb.uploader.handler', $handlerName);
+
+            $namerServiceId = $values['namer']['service'];
+            $options = $values['namer']['options'];
+            if (!empty($options)) {
+                $namerDefinition = $containerBuilder->getDefinition($namerServiceId);
+                $namerDefinition->addMethodCall('configure', [$options]);
+            }
+
+            $storageServiceType = $values['storage']['type'];
+
+            if ($storageServiceType == 'file_system') {
+                $storageServiceId = $values['storage']['service'];
+            } elseif ($storageServiceType == 'fly_system') {
+                //todo
+            }
+
+            $handlerDefinition = new Definition(UploadHandler::class);
+
+            $handlerDefinition->setArgument(0, $values['upload_dir']);
+            $handlerDefinition->setArgument(1, new Reference($namerServiceId));
+            $handlerDefinition->setArgument(2, new Reference($storageServiceId));
+
+            $containerBuilder->setDefinition($id, $handlerDefinition);
+
+            $entity = $values['entity'];
+            $entityHandlers[$entity] = $id;
+        }
+
+        $containerBuilder->setParameter('teebb.uploader.handlers', $entityHandlers);
+    }
 }

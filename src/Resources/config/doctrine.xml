@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="Teebb\UploaderBundle\EventSubscriber\Doctrine\UploadFileSubscriber" public="true">
-            <argument type="service" id="Teebb\UploaderBundle\Handler\UploadHandler"/>
+            <argument type="service" id="teebb.uploader.handler.simple_file_handler"/>
             <argument type="service" id="event_dispatcher"/>
             <tag name="doctrine.event_subscriber" />
         </service>
