@@ -96,11 +96,11 @@ class TeebbUploaderExtension extends Extension
                 if (false === strpos($flySystemServiceId, 'oneup_flysystem.')){
                     $flySystemServiceId = sprintf('%s.%s',
                         'oneup_flysystem',$flySystemServiceId.'_filesystem');
-
-                    $storageServiceId = 'teebb.uploader.storage.fly_system_storage';
-                    $storageDefinition = $containerBuilder->getDefinition($storageServiceId);
-                    $storageDefinition->setArgument(0, new Reference($flySystemServiceId));
                 }
+
+                $storageServiceId = 'teebb.uploader.storage.fly_system_storage';
+                $storageDefinition = $containerBuilder->getDefinition($storageServiceId);
+                $storageDefinition->setArgument(0, new Reference($flySystemServiceId));
             }
 
             $handlerDefinition = new Definition(UploadHandler::class);
