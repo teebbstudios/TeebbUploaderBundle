@@ -12,7 +12,8 @@
         {%- endif -%}
     </label>
     </{{ element|default('div') }}>
-    {% if data and errors == null %}
+
+    {% if data and errors is empty %}
         <div>
             {% if show_image %}
                 <img src="{{ asset(data.fileName, package_name) }}" {{- block('image_attr') -}} />
@@ -21,6 +22,7 @@
             {% endif %}
         </div>
     {% endif %}
+
 {% endblock %}
 
 {% block image_attr %}
