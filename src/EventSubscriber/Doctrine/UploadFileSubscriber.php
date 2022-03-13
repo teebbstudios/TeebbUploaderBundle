@@ -4,7 +4,6 @@
 namespace Teebb\UploaderBundle\EventSubscriber\Doctrine;
 
 
-use App\Entity\SimpleFile;
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
@@ -12,14 +11,9 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Teebb\UploaderBundle\Event\AfterFileObjectSetPropertyEvent;
-use Teebb\UploaderBundle\Handler\UploadHandler;
 
 class UploadFileSubscriber implements EventSubscriberInterface
 {
-//    /**
-//     * @var UploadHandler
-//     */
-//    private $uploadHandler;
 
     private $eventDispatcher;
 
@@ -30,9 +24,9 @@ class UploadFileSubscriber implements EventSubscriberInterface
 
     private $container;
 
-    public function __construct(ParameterBagInterface $parameterBag, ContainerInterface $container, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ParameterBagInterface $parameterBag, ContainerInterface $container,
+                                EventDispatcherInterface $eventDispatcher)
     {
-//        $this->uploadHandler = $uploadHandler;
         $this->handlers = $parameterBag->get('teebb.uploader.handlers');
 
         $this->eventDispatcher = $eventDispatcher;

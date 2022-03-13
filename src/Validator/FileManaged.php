@@ -20,5 +20,5 @@ class FileManaged extends Constraint
      * Any public properties become valid options for the annotation.
      * Then, use these in your validator class.
      */
-    public $message = '当前文件{{ name }} 不允许上传，只允许上传图片.';
+    public $message = 'The current file "{{ name }}" mime is not allowed, only allowed "{{ mimes }}".';
 }

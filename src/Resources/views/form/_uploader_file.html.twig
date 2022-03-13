@@ -12,12 +12,12 @@
         {%- endif -%}
     </label>
     </{{ element|default('div') }}>
-    {% if data %}
+    {% if data and errors == null %}
         <div>
             {% if show_image %}
-                <img src="{{ base_path ~ data.fileName }}" {{- block('image_attr') -}} />
+                <img src="{{ asset(data.fileName, package_name) }}" {{- block('image_attr') -}} />
             {% else %}
-                <a href="{{ base_path ~ data.fileName }}" download>{{ data.originName }}</a>
+                <a href="{{ asset(data.fileName, package_name) }}" download>{{ data.originName }}</a>
             {% endif %}
         </div>
     {% endif %}

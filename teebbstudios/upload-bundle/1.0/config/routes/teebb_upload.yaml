@@ -1,3 +1,0 @@
-_teebb_upload:
-    resource: "@TeebbUploadBundle/Resources/config/routing/route.xml"
-    prefix: /teebb

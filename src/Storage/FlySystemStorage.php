@@ -19,7 +19,7 @@ class FlySystemStorage implements StorageInterface
     public function upload(UploadedFile $file, string $distDir, string $fileName): void
     {
         $stream = fopen($file->getPathname(), 'r');
-        //这里以流的方式上传
+
         $result = $this->fileSystem->writeStream(
             $distDir . \DIRECTORY_SEPARATOR . $fileName,
             $stream

@@ -4,17 +4,11 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-<!--    <entity name="Teebb\UploaderBundle\Entity\File" table="teebb_file">-->
     <mapped-superclass name="Teebb\UploaderBundle\Entity\File">
-<!--        <id name="id" type="integer" column="id">-->
-<!--            <generator strategy="AUTO"/>-->
-<!--        </id>-->
-
         <field name="originName" column="origin_name" type="string" length="255" nullable="true" unique="false"/>
         <field name="fileName" column="file_name" type="string" length="255" nullable="true" unique="false"/>
         <field name="mimeType" column="mime_type" type="string" length="255" nullable="true" unique="false"/>
         <field name="fileSize" column="file_size" type="integer"/>
     </mapped-superclass>
-<!--    </entity>-->
 
 </doctrine-mapping>

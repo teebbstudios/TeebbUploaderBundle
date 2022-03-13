@@ -21,25 +21,6 @@ class Configuration implements ConfigurationInterface
             $rootNode = $builder->root('teebb_uploader');
         }
 
-//        $rootNode
-//            ->children()
-//                ->scalarNode('upload_dir')->isRequired()->end()
-//                ->arrayNode('namer')
-//                    ->addDefaultsIfNotSet()
-//                    ->beforeNormalization()
-//                        ->ifString()
-//                        ->then(function($value){
-//                            return ['service'=>$value, 'options'=>[]];
-//                        })
-//                    ->end()
-//                    ->children()
-//                        ->scalarNode('service')->defaultValue('teebb.uploader.namer.php_namer')->end()
-//                        ->variableNode('options')->defaultValue([])->end()
-//                    ->end()
-//                ->end()
-//                ->scalarNode('storage')->defaultValue('teebb.uploader.storage.file_system_storage')->end()
-//            ->end();
-
         $this->addHandlersSection($rootNode);
 
         return $builder;
@@ -55,7 +36,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('entity')->isRequired()->end()
                             ->scalarNode('upload_dir')->isRequired()->end()
-                            ->scalarNode('uri_prefix')->isRequired()->end()
+                            ->scalarNode('package_name')->info('Used for twig asset() method second argument.')->isRequired()->end()
                             ->arrayNode('namer')
                                 ->addDefaultsIfNotSet()
                                 ->beforeNormalization()

@@ -11,13 +11,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class FileAnnotation
 {
-//    /**
-//     * @ORM\Id
-//     * @ORM\GeneratedValue
-//     * @ORM\Column(type="integer")
-//     */
-//    private $id;
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -42,11 +35,6 @@ class FileAnnotation
      * @var UploadedFile|null
      */
     private $uploadedFile;
-
-//    public function getId(): ?int
-//    {
-//        return $this->id;
-//    }
 
     public function getOriginName(): ?string
     {

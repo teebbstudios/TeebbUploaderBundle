@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PhpNamer implements NamerInterface
 {
-
     public function rename(UploadedFile $file): string
     {
         return pathinfo(htmlspecialchars($file->getClientOriginalName()), PATHINFO_FILENAME) . '-'

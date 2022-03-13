@@ -10,41 +10,30 @@ class FileManagedValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
-//        dd($value, $constraint);
-        /* @var $constraint \App\Validator\FileManaged */
-
+        /* @var $constraint FileManaged */
         if (null === $value || '' === $value) {
             return;
         }
-//dd($value);
-//        foreach ($value as $file)
-//        {
-            if ($value instanceof File){
-                $mimeType = $value->getMimeType();
 
-                foreach ($constraint->mimeTypes as $allowMimeType){
-                    if ($allowMimeType === $mimeType){
+        if ($value instanceof File) {
+            $mimeType = $value->getMimeType();
+
+            foreach ($constraint->mimeTypes as $allowMimeType) {
+                if ($allowMimeType === $mimeType) {
+                    return;
+                }
+
+                if ($discrete = strstr($allowMimeType, '/*', true)) {
+                    if (strstr($mimeType, '/', true) === $discrete) {
                         return;
                     }
-
-                    if ($discrete = strstr($allowMimeType, '/*', true)) {
-                        if (strstr($mimeType, '/', true) === $discrete) {
-                            return;
-                        }
-                    }
-
                 }
-//                if ($prestr = strstr($mimeType, '/', true)){
-//                    if ($prestr === 'image'){
-//                        return;
-//                    }
-//                }
             }
-//        }
+        }
 
-        // TODO: implement the validation here
         $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ name }}', $value->getOriginName())
+            ->setParameter('{{ name }}', $value->getUploadedFile()->getClientOriginalName())
+            ->setParameter('{{ mimes }}', implode(',', $constraint->mimeTypes))
             ->addViolation();
     }
 }

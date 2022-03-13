@@ -8,11 +8,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File
 {
-//    /**
-//     * @var int
-//     */
-//    private $id;
-
     /**
      * @var string
      */
@@ -32,14 +27,6 @@ class File
      * @var int
      */
     private $fileSize;
-
-//    /**
-//     * @return int
-//     */
-//    public function getId(): int
-//    {
-//        return $this->id;
-//    }
 
     /**
      * @var UploadedFile|null

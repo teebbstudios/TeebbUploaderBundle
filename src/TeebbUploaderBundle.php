@@ -6,7 +6,6 @@ use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use Teebb\UploaderBundle\DependencyInjection\Compiler\NamerCompilerPass;
 use Teebb\UploaderBundle\DependencyInjection\Compiler\TwigFormThemesCompilerPass;
 
 class TeebbUploaderBundle extends Bundle
@@ -19,11 +18,10 @@ class TeebbUploaderBundle extends Bundle
             realpath(__DIR__ . '/Resources/config/doctrine-mapping') => 'Teebb\UploaderBundle\Entity'
         ];
 
-        $namespaces = ['Teebb\UploaderBundle\Entity'];
-        $dirs = [realpath(__DIR__ . '/Entity')];
+//        $namespaces = ['Teebb\UploaderBundle\Entity'];
+//        $dirs = [realpath(__DIR__ . '/Entity')];
         if (class_exists(DoctrineOrmMappingsPass::class)) {
             $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping));
-
 //            $container->addCompilerPass(DoctrineOrmMappingsPass::createAnnotationMappingDriver($namespaces, $dirs));
         }
 
@@ -32,6 +30,5 @@ class TeebbUploaderBundle extends Bundle
             $container->addCompilerPass(new TwigFormThemesCompilerPass());
         }
 
-        $container->addCompilerPass(new NamerCompilerPass());
     }
 }
