@@ -13,8 +13,6 @@
 
 支持多个文件Entity类，支持不同的文件Entity类上传到不同的文件目录，支持不同的文件Entity类使用不同的文件命名规则。详细原理，请查看视频教程。
 
-开源项目，欢迎贡献代码。
-
 ### 安装
 目前Bundle功能会继续开发，请安装master分支的代码。
 ```
@@ -29,18 +27,20 @@ composer require teebbstudios/uploader-bundle:dev-master
 teebb_upload:
     handlers:
         # 为不同的文件Entity类定义不同的Handler， 键值用于handler服务类的id，可以任意定义
+        # 使用FileSystem上传到本地服务器
         simple_file_handler:
             entity: App\Entity\SimpleFile # 文件数据的Entity全类名
             upload_dir: '%kernel.project_dir%/public/teebb_upload'  # 上传的目标目录
-            uri_prefix: 'teebb_upload' # 用于文件显示时添加前缀
-
+            package_name: 'teebb_upload' # 用于文件显示时添加前缀，需要在assets.yaml文件中进行配置
+        
+        # 使用FlySystem上传文件
         simple_file_handler_demo2:
             entity: App\Entity\SimpleFile # 文件数据的Entity全类名
             upload_dir: 'string'  # 上传的目标目录
-            uri_prefix: 'string' # 用于文件显示时添加前缀
+            package_name: 'string' # 用于文件显示时添加前缀，需要在assets.yaml文件中进行配置
             storage:  
                 type: 'fly_system' # 使用FlySystem完成文件的上传，需要安装oneup/flysystem-bundle
-                service: 'oneup_flysystem.default_filesystem_filesystem' # 可使用flysystem提供的服务类id 或 配置项名称例如："default_filesystem"
+                service: 'oneup_flysystem.default_filesystem_filesystem' # 可使用flysystem提供的服务类id 或 配置项名称，例如："default_filesystem"
             namer:
                 service: Teebb\UploadBundle\Namer\HashNamer
                 options:
@@ -49,7 +49,7 @@ teebb_upload:
 
 ```
 ### 代码协议
-本项目代码遵循MIT开源协议
+开源项目，本项目代码遵循MIT开源协议，欢迎贡献代码。
 
 ### 广告
 在企业中Symfony项目是按Bundle分模块开发的，学习Bundle开发很有必要。本视频教程为本人原创教程，花费了大量精力，保证一如既往的视频质量。
