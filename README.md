@@ -24,7 +24,7 @@ composer require teebbstudios/uploader-bundle:dev-master
 ```yaml
 #<symfony-project-root>/config/packages/teebb_uploader.yaml
 
-teebb_upload:
+teebb_uploader:
     handlers:
         # 为不同的文件Entity类定义不同的Handler， 键值用于handler服务类的id，可以任意定义
         # 使用FileSystem上传到本地服务器
