@@ -13,7 +13,7 @@
     </label>
     </{{ element|default('div') }}>
 
-    {% if data and errors is empty %}
+    {% if data and data.fileName and errors is empty %}
         <div>
             {% if show_image %}
                 <img src="{{ asset(data.fileName, package_name) }}" {{- block('image_attr') -}} />
