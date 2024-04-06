@@ -50,9 +50,9 @@ class File
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFileName(): string
+    public function getFileName(): ?string
     {
         return $this->fileName;
     }
